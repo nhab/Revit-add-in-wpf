@@ -78,10 +78,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="search.png" />
+    <Resource Include="Resources\search.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="delete.png" />
+    <Resource Include="Resources\delete.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -6,6 +6,6 @@
     <StartProgram>C:\Program Files\Autodesk\Revit 2022\Revit.exe</StartProgram>
   </PropertyGroup>
   <PropertyGroup>
-    <ProjectView>ShowAllFiles</ProjectView>
+    <ProjectView>ProjectFiles</ProjectView>
   </PropertyGroup>
 </Project>

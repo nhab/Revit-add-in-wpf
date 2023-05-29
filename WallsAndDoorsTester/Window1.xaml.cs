@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using Autodesk.Revit.UI.Selection;
 using WallsAndDoorsTester;
 using WallsAndDoorsTester.ExternalEvents;
 
@@ -24,10 +25,11 @@ namespace ClassLibrary1
 
         ExternalEventHandlerSelect _externalEventHaandlerSelect;
         ExternalEvent _SelectExternalevent;
+        string selectedItemText = "all";
 
-        public ObservableCollection<ElementsInDataGrid> Cols { get; set; }
+        public ObservableCollection<ElementsInDataGrid> data { get; set; }
+        
 
-            
         public Window1(Document doc
             , ExternalEventDeleteHandler deeh
             , ExternalEvent deleteEvent
@@ -45,38 +47,42 @@ namespace ClassLibrary1
             _SelectExternalevent = selectEvent;
         }
 
+        private void RefreshDataGridData( )
+        {
+            data = new ObservableCollection<ElementsInDataGrid>();
+            if (selectedItemText == "wall" || selectedItemText == "all")
+            {
+                ICollection<Element> walls = new FilteredElementCollector(Doc, Doc.ActiveView.Id)
+                .OfCategory(BuiltInCategory.OST_Walls).ToElements();
+
+                foreach (Element wall in walls)
+                {
+                    string id = wall.Id.ToString();
+                    data.Add(new ElementsInDataGrid("Wall", id));
+                }
+            }
+            if (selectedItemText == "door" || selectedItemText == "all")
+            {
+                ICollection<Element> doors = new FilteredElementCollector(Doc, Doc.ActiveView.Id)
+                  .OfCategory(BuiltInCategory.OST_Doors).ToElements();
+
+                foreach (Element door in doors)
+                {
+                    string id = door.Id.ToString();
+                    data.Add(new ElementsInDataGrid("Door", id));
+                }
+            }
+            ElementsDataGrid.ItemsSource = data;
+        }
+
         private void CmbSelect_ItemChanged(object sender, EventArgs e)
         {
             try
             {
                 System.Windows.Controls.ComboBox comboBox = sender as System.Windows.Controls.ComboBox;
                 ComboBoxItem selectedItem = comboBox.SelectedItem as ComboBoxItem;
-                string selection          = selectedItem.Content.ToString().ToLower();
-                
-                Cols = new ObservableCollection<ElementsInDataGrid>();
-                if (selection == "wall" || selection == "all")
-                {
-                    ICollection<Element> walls = new FilteredElementCollector(Doc, Doc.ActiveView.Id)
-                    .OfCategory(BuiltInCategory.OST_Walls).ToElements();
-
-                    foreach (Element wall in walls)
-                    {
-                        string id = wall.Id.ToString();
-                        Cols.Add(new ElementsInDataGrid("Wall", id));
-                    }
-                }
-                if (selection == "door" || selection == "all")
-                {
-                    ICollection<Element> doors = new FilteredElementCollector(Doc, Doc.ActiveView.Id)
-                      .OfCategory(BuiltInCategory.OST_Doors).ToElements();
-
-                    foreach (Element door in doors)
-                    {
-                        string id = door.Id.ToString();
-                        Cols.Add(new ElementsInDataGrid("Door", id));
-                    }
-                }
-                ElementsDataGrid.ItemsSource = Cols;
+                 selectedItemText          = selectedItem.Content.ToString().ToLower();
+                RefreshDataGridData();    
             }
             catch (Exception ex)
             {
@@ -116,6 +122,7 @@ namespace ClassLibrary1
                 _externalEventHandlerDelete._elementId = elementId;
               
                  _DeleteExternalevent.Raise();
+                RefreshDataGridData();
             } catch (Exception ex)
             {
                 TaskDialog.Show("Revit", ex.Message);

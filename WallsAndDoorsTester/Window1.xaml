@@ -39,10 +39,10 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <Button Click="DeleteButton_Click" Margin="5" Tag="{Binding ElementId}">
-                                    <Image Source="delete.png" Width="10"/>
+                                    <Image Source="Resources/delete.png" Width="10"/>
                                 </Button>
                                 <Button Click="SearcheButton_Click" Tag="{Binding ElementId}">
-                                    <Image Source="search.png" Width="10"/>
+                                    <Image Source="Resources/search.png" Width="10"/>
                                 </Button>
                             </StackPanel>
                         </DataTemplate>
