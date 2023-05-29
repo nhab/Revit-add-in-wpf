@@ -1,0 +1,59 @@
+﻿<Window x:Class="ClassLibrary1.Window1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ClassLibrary1"
+        mc:Ignorable="d"
+        Title="Wall Door Tester" 
+        ResizeMode="NoResize" Height="450" Width="469">
+    <Grid Margin="0,0,32,0" Width="NaN">
+
+        <Label Name="LblSelect"
+            Content="Select:" 
+               HorizontalAlignment="Left" Margin="32,24,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <ComboBox Name="CmbSelect"
+                  HorizontalAlignment="Left" Margin="104,28,0,0" VerticalAlignment="Top" Width="308" 
+                  SelectionChanged="CmbSelect_ItemChanged">
+            <ComboBoxItem Content="All"/>
+            <ComboBoxItem Content="Wall"/>
+            <ComboBoxItem Content="Door"/>
+        </ComboBox>
+       
+        <DataGrid 
+            Name="ElementsDataGrid"
+            AutoGenerateColumns="False"          
+            Margin="35,69,26,49" Height="NaN" Width="NaN">
+            <DataGrid.Columns>
+                <DataGridTextColumn 
+                    Header="ElementType"
+                    Binding="{Binding ElementType}"
+                    Width="90"/>
+                <DataGridTextColumn 
+                    Header="ElementId"
+                    Binding="{Binding ElementId}"
+                    Width="90"/>
+
+                <DataGridTemplateColumn Header="Action">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Click="DeleteButton_Click" Margin="5" Tag="{Binding ElementId}">
+                                    <Image Source="delete.png" Width="10"/>
+                                </Button>
+                                <Button Click="SearcheButton_Click" Tag="{Binding ElementId}">
+                                    <Image Source="search.png" Width="10"/>
+                                </Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+
+        </DataGrid>
+        
+        <Button Content="Close" Margin="394,375,-124,0" VerticalAlignment="Top" RenderTransformOrigin="-4.844,0.002" Width="NaN"/>
+        <StatusBar HorizontalAlignment="Left" Height="34" VerticalAlignment="Bottom" Width="487"/>
+
+    </Grid>
+</Window>
