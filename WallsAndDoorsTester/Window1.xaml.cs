@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using WallsAndDoorsTester;
+using WallsAndDoorsTester.ExternalEvents;
 
 namespace ClassLibrary1
 {
@@ -17,21 +18,31 @@ namespace ClassLibrary1
     /// </summary>
     public partial class Window1 : Window
     {
-        Autodesk.Revit.DB.Document Doc;
-        ExternalEventDeleteHandler _externaleventDelete;
+        Document Doc;
+        ExternalEventDeleteHandler _externalEventHandlerDelete;
         ExternalEvent _DeleteExternalevent;
+
+        ExternalEventHandlerSelect _externalEventHaandlerSelect;
+        ExternalEvent _SelectExternalevent;
+
         public ObservableCollection<ElementsInDataGrid> Cols { get; set; }
 
             
-        public Window1(Autodesk.Revit.DB.Document doc, 
-            ExternalEventDeleteHandler eh
-            , ExternalEvent deleteEvent)
+        public Window1(Document doc
+            , ExternalEventDeleteHandler deeh
+            , ExternalEvent deleteEvent
+             , ExternalEventHandlerSelect seeh
+            , ExternalEvent selectEvent)
         {
             InitializeComponent();
+
             Doc = doc;
-            _externaleventDelete = eh;
+            
+            _externalEventHandlerDelete = deeh;
             _DeleteExternalevent = deleteEvent;
 
+            _externalEventHaandlerSelect = seeh;
+            _SelectExternalevent = selectEvent;
         }
 
         private void CmbSelect_ItemChanged(object sender, EventArgs e)
@@ -82,15 +93,10 @@ namespace ClassLibrary1
                 string IdString = button.Tag.ToString();
                
                 int id = int.Parse(IdString);
-                ElementId elementId = new ElementId(id); // Replace 1234 with the ID of the element you want to select
-                Element element = Doc.GetElement(elementId);
-                if (element != null)
-                {
-                    UIDocument uidoc = new UIDocument(Doc);
-                  
-                    uidoc.Selection.SetElementIds(new List<ElementId> { elementId });
-                    uidoc.ShowElements(new List<ElementId> { elementId });
-                }
+                ElementId elementId = new ElementId(id);
+                _externalEventHaandlerSelect._elementId = elementId;
+                _SelectExternalevent.Raise();
+
             }
             catch (Exception ex)
             {
@@ -107,7 +113,7 @@ namespace ClassLibrary1
 
                 int id = int.Parse(IdString);
                 ElementId elementId = new ElementId(id);
-                _externaleventDelete._elementId = elementId;
+                _externalEventHandlerDelete._elementId = elementId;
               
                  _DeleteExternalevent.Raise();
             } catch (Exception ex)

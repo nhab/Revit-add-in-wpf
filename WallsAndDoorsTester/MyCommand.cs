@@ -4,6 +4,7 @@ using Autodesk.Revit.UI;
 using ClassLibrary1;
 using System.Windows;
 using System.Windows.Controls;
+using WallsAndDoorsTester.ExternalEvents;
 
 namespace WallsAndDoorsTester
 {
@@ -15,11 +16,18 @@ namespace WallsAndDoorsTester
          
             UIApplication uiApp = commandData.Application;
             Document doc = uiApp.ActiveUIDocument.Document;
-            ExternalEventDeleteHandler eh = new ExternalEventDeleteHandler();
-       
-            ExternalEvent _myExternalevent = ExternalEvent.Create(eh);
+            ExternalEventDeleteHandler deleteExternalEventHandler = new ExternalEventDeleteHandler();
+            ExternalEventHandlerSelect selectExternalEventHandler = new ExternalEventHandlerSelect();
 
-            Window1 win2 = new Window1(doc,eh,_myExternalevent);
+            ExternalEvent _myDeleteExternalevent = ExternalEvent.Create(deleteExternalEventHandler);
+            ExternalEvent _mySelectExternalEvent = ExternalEvent.Create(selectExternalEventHandler);  
+            Window1 win2 = new Window1(
+                doc, 
+                deleteExternalEventHandler
+                , _myDeleteExternalevent
+                , selectExternalEventHandler
+                ,_mySelectExternalEvent
+                );
             win2.Show();
            
             return Result.Succeeded;
